@@ -1,6 +1,7 @@
 #include <SFML\Graphics.hpp>
 #include <SFML\Network.hpp>
 #include <iostream>
+#include "Hud.h"
 
 int main() {
 	sf::Vector2i screenDimensions(800, 600);
@@ -13,17 +14,7 @@ int main() {
 		std::cout << "no se puede leer la font\n" << std::endl;
 	}
 
-	//HUD
-	sf::RectangleShape hudSeparator(sf::Vector2f(800, 5));
-	hudSeparator.setFillColor(sf::Color(200, 200, 200, 255));
-	hudSeparator.setPosition(0, 100);
-
-	//HP
-	sf::RectangleShape vidaSeparator(sf::Vector2f(100,50));
-	vidaSeparator.setFillColor(sf::Color(255, 0, 0, 0));
-	vidaSeparator.setOutlineColor(sf::Color(200, 200, 200, 255));
-	vidaSeparator.setOutlineThickness(5);
-	vidaSeparator.setPosition(20, 20);
+	HUD hud;
 
 	while (window.isOpen())
 	{
@@ -44,8 +35,7 @@ int main() {
 		}
 
 		//DRAW HUD
-		window.draw(hudSeparator);
-		window.draw(vidaSeparator);
+		hud.draw(&window);
 
 		//clear
 		window.display();

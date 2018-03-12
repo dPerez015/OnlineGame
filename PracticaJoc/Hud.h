@@ -5,10 +5,10 @@
 
 class HUD {
 private: 
-	std::list<sf::RectangleShape> rectangulos;
+	std::list<sf::RectangleShape*> rectangulos;
 
 public:
 	HUD();
 	~HUD();
-	void draw();
+	void draw(sf::RenderWindow* renderer);
 };
