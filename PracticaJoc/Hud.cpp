@@ -20,9 +20,33 @@ HUD::HUD() {
 
 	sf::RectangleShape* actionsSeparator = new sf::RectangleShape(sf::Vector2f(5, 100));
 	actionsSeparator->setOutlineColor(sf::Color(200, 200, 200, 255));
-	actionsSeparator->setPosition(500, 0);
+	actionsSeparator->setPosition(350, 0);
 	rectangulos.push_back(actionsSeparator);
+	
+	sf::RectangleShape* buttonsSeparator = new sf::RectangleShape(sf::Vector2f(5, 100));
+	buttonsSeparator->setOutlineColor(sf::Color(200, 200, 200, 255));
+	buttonsSeparator->setPosition(650, 0);
+	rectangulos.push_back(buttonsSeparator);
 
+	sf::RectangleShape* subActionsSeparator = new sf::RectangleShape(sf::Vector2f(300,5));
+	subActionsSeparator->setOutlineColor(sf::Color(200, 200, 200, 255)); 
+	subActionsSeparator->setPosition(350, 40);
+	rectangulos.push_back(subActionsSeparator);
+
+	sf::RectangleShape* subActionsSeparator1 = new sf::RectangleShape(sf::Vector2f(5, 60));
+	subActionsSeparator1->setOutlineColor(sf::Color(200, 200, 200, 255));
+	subActionsSeparator1->setPosition(425, 40);
+	rectangulos.push_back(subActionsSeparator1);
+
+	sf::RectangleShape* subActionsSeparator2 = new sf::RectangleShape(sf::Vector2f(5, 60));
+	subActionsSeparator2->setOutlineColor(sf::Color(200, 200, 200, 255));
+	subActionsSeparator2->setPosition(500, 40);
+	rectangulos.push_back(subActionsSeparator2);
+
+	sf::RectangleShape* subActionsSeparator3 = new sf::RectangleShape(sf::Vector2f(5, 60));
+	subActionsSeparator3->setOutlineColor(sf::Color(200, 200, 200, 255));
+	subActionsSeparator3->setPosition(575, 40);
+	rectangulos.push_back(subActionsSeparator3);
 
 
 	//HP
