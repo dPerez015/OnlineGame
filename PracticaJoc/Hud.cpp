@@ -4,9 +4,18 @@ void HUD::draw(sf::RenderWindow* renderer) {
 	for (std::list<sf::RectangleShape*>::iterator it=rectangulos.begin(); it != rectangulos.end(); ++it) {
 		renderer->draw(**it);
 	}
+	for (std::list<sf::Text*>::iterator it = texts.begin(); it != texts.end(); ++it) {
+		renderer->draw(**it);
+	}
 }
 
 HUD::HUD() {
+	//Font
+	if (!font.loadFromFile("calibril.ttf"))
+	{
+		std::cout << "Can't load the font file" << std::endl;
+	}
+
 	//HUD
 	sf::RectangleShape* hudSeparator= new sf::RectangleShape(sf::Vector2f(800, 5));
 	hudSeparator->setFillColor(sf::Color(200, 200, 200, 255));
@@ -48,6 +57,24 @@ HUD::HUD() {
 	subActionsSeparator3->setPosition(575, 40);
 	rectangulos.push_back(subActionsSeparator3);
 
+	
+	sf::Text* hp = new sf::Text("HP",font,24);
+	hp->setFillColor(sf::Color(220,220,220,255));
+	hp->setStyle(sf::Text::Bold);
+	hp->setPosition(10, 20);
+	texts.push_back(hp);
+
+	sf::Text* objetosText = new sf::Text("OBJETOS", font, 24);
+	objetosText->setFillColor(sf::Color(220, 220, 220, 255));
+	objetosText->setStyle(sf::Text::Bold);
+	objetosText->setPosition(230, 10);
+	texts.push_back(objetosText);
+
+	sf::Text* actionsText = new sf::Text("ACCIONES", font, 24);
+	actionsText->setFillColor(sf::Color(220, 220, 220, 255));
+	actionsText->setStyle(sf::Text::Bold);
+	actionsText->setPosition(450, 7);
+	texts.push_back(actionsText);
 
 	//HP
 	sf::RectangleShape* vidaSeparator =new sf::RectangleShape(sf::Vector2f(100, 50));
