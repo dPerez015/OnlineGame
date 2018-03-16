@@ -39,6 +39,7 @@ public:
 };
 
 int main() {
+	
 	sf::TcpListener listener;
 	std::vector<sf::TcpSocket*> clients;
 	sf::Socket::Status status;
@@ -47,8 +48,9 @@ int main() {
 		std::cout << "Problema al escuchar por el puerto 50000\n";
 	}
 
-	sf::TcpSocket* incomingClient = new sf::TcpSocket;
+	
 	for (int i = 0; i < 4; i++) {
+		sf::TcpSocket* incomingClient = new sf::TcpSocket;
 		if (listener.accept(*incomingClient) == sf::Socket::Done) {
 			std::cout << "Nuevo cliente aceptado\n";
 			clients.push_back(incomingClient);
@@ -57,11 +59,15 @@ int main() {
 			//recieve con ID + nickname (la ID es para confirmar que es el mismo. El ID es por defecto en cada mensaje?)
 
 		}
+		delete incomingClient;
 	}
 	listener.close();
 	//Aqui ya hay 4 clientes conectados y puede empezar el juego
 	
+	while (true) {
+
+	}
 
 
-	system("PAUSE");
+	//system("PAUSE");
 }
