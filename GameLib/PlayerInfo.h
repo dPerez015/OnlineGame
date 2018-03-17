@@ -4,17 +4,17 @@
 
 enum ItemList { boots, armor, shield, bow };
 
-class ClientProxy {
+class PlayerInfo {
 	int playerID; //1,2,3 or 4
 	std::string nickname;
 	std::vector<bool> items; //objetos
 	std::vector<int> position;
 
-	ClientProxy(int id) {
-		playerID = id;
-	};
-
+	
 public:
+	PlayerInfo() {};
+	PlayerInfo(int id) { playerID = id; };
+	void setPlayerID(int id) { playerID = id; };
 	int getPlayerID() { return playerID; }
 	void setNickname(std::string s) { nickname = s; }
 	std::string getNickname() { return nickname; }
