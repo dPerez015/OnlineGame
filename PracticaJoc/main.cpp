@@ -138,6 +138,7 @@ int main() {
 				std::vector<std::string> words = commandToWords(commands.front());
 				if (words[0] == "id") {
 					hud.setPlayer(players[std::stoi(words[1])]);
+					players[std::stoi(words[1])]->makeVisible(true);
 				}
 				else if (words[0] == "move") {
 					std::cout << words[2]<<"	"<<words[3];
@@ -208,7 +209,8 @@ int main() {
 			hud.draw(&window);
 			map.draw(&window);
 			for (std::map<int, Player*>::iterator it = players.begin(); it != players.end(); ++it) {
-				(*it).second->draw(&window);
+				if((*it).second->getVisible())
+					(*it).second->draw(&window);
 			}
 			window.draw(separator);
 			for (size_t i = 0; i < aMensajes.size(); i++)
