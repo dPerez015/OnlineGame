@@ -4,7 +4,9 @@
 #include <iostream>
 #include <vector>
 #include <thread>
+#include <mutex>
 #include "PlayerInfo.h"
+#include "Game.h"
 
 
 void cleanup();
@@ -12,6 +14,8 @@ void receiveThread(sf::TcpSocket* socket);
 std::map<sf::TcpSocket*, int> socketToID; //map para guardar ID segun el socket
 std::thread t1, t2, t3, t4;
 std::vector<PlayerInfo> players;
+std::vector<sf::TcpSocket*> clients;
+std::mutex mu;
 
 void inicializarThread(int clientNumber, sf::TcpSocket* socket) {
 	if (clientNumber == 1) t1 = std::thread(&receiveThread, socket);
@@ -37,17 +41,16 @@ void receiveThread(sf::TcpSocket* socket) {
 			buffer[bytesReceived] = '\0';
 			std::cout << "El cliente " << id << " envia el siguiente mensaje: " << buffer << std::endl;
 			//tratar el mensaje
-			//funcion de tratar el comando?
+			mu.lock();
+			manageCommandServer(buffer, players, id, clients);
+			mu.unlock();
 		}
 	}
 };
 
 int main() {
 	
-	sf::TcpListener listener;
-	std::vector<sf::TcpSocket*> clients;
-	sf::Socket::Status status;
-	
+	sf::TcpListener listener;	
 
 	if (listener.listen(50000) != sf::Socket::Done) {
 		std::cout << "Problema al escuchar por el puerto 50000\n";
