@@ -9,12 +9,19 @@
 
 extern bool waitingForPlayers;
 
-void manageCommandClient(std::string command, std::map<int, Player*>* players,sf::TcpSocket* socket, HUD* hud) {
+void manageCommandClient(std::string command, std::map<int, Player*>* players,sf::TcpSocket* socket, HUD* hud, std::vector<std::string>* aMensajes) {
 	std::vector<std::string> words = commandToWords(command);
 	if (words[0] == "chat") {
-		//aMensajes.push_back(words[1]);
+		aMensajes->push_back(words[1]);
+		if (aMensajes->size() > 19)
+		{
+			aMensajes->erase(aMensajes->begin(), aMensajes->begin() + 1);
+		}
 	}
-	else if (words[0] == "vis") {
+	else if (words[0] == "v") {
+		if (words[2] == "0") {
+			players[std::stoi(words[1])].
+		}
 		//players[words[1]]
 	}
 	else if (words[0] == "turn") {

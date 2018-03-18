@@ -51,6 +51,10 @@ public:
 		pos = newPos;
 		updatePos();
 	}
+
+	void makeVisible(bool) {
+
+	}
 	void setControlable() {
 		rectangles[3]->setOutlineColor(sf::Color(0, 255, 0, 255));
 		rectangles[3]->setOutlineThickness(2);
