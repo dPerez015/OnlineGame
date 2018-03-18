@@ -19,6 +19,8 @@ std::map<int,PlayerInfo> players;
 std::map<int,sf::TcpSocket*> clients;
 std::mutex mu;
 Map mapa;
+std::vector<int> turnOrder;
+int turnIndex = 0;
 
 
 void inicializarThread(int clientNumber, sf::TcpSocket* socket) {
@@ -45,8 +47,10 @@ void receiveThread(sf::TcpSocket* socket,int id) {
 			buffer[bytesReceived] = '\0';
 			std::cout << "El cliente " << id << " envia el siguiente mensaje: " << buffer << std::endl;
 			//tratar el mensaje
+			
 			mu.lock();
-			manageCommandServer(buffer, players, id, clients);
+			manageCommandServer(buffer, players, id, clients,turnOrder,turnIndex);
+			
 			mu.unlock();
 		}
 	}
@@ -54,7 +58,9 @@ void receiveThread(sf::TcpSocket* socket,int id) {
 
 int main() {
 	
-	sf::TcpListener listener;	
+	sf::TcpListener listener;
+	
+	
 
 	if (listener.listen(50000) != sf::Socket::Done) {
 		std::cout << "Problema al escuchar por el puerto 50000\n";
@@ -97,6 +103,7 @@ int main() {
 				inicializarThread(i, incomingClient); //abrir el thread para ese socket
 			}
 		}
+		turnOrder.push_back(i); //orden de turno
 	}
 	listener.close();
 	//nos aseguramos que todos los clientes han introducido su nick
@@ -134,12 +141,18 @@ int main() {
 		(*it).second->send("start", 6);
 	}
 
-	while (true) {
+	//game loop
+	while (players.size()>1) {
+
+
 
 	}
 
-	cleanup();
+	std::cout << "Partida acabada\n";
+	(*clients.begin()).second->send("win", 4);
 
+	
+	cleanup();
 	system("PAUSE");
 }
 
