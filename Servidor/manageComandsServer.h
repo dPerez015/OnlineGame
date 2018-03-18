@@ -32,7 +32,7 @@ void manageCommandServer(std::string command, std::map<int,PlayerInfo> &players,
 					intergerPosition playerRoom = mapa.getPlayerRoom(players[id].getPosition());
 					for (std::map<int, sf::TcpSocket*>::iterator it = clients.begin(); it != clients.end(); ++it) {
 						
-						if (playerRoom == mapa.getPlayerRoom(players[(*it).first].getPosition())) {
+						if (playerRoom == mapa.getPlayerRoom(players[(*it).first].getPosition()) && (*it).first!=id ){
 							std::string msj = "move_";
 							msj += std::to_string(id);
 							msj += "_";
