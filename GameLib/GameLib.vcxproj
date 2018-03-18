@@ -136,6 +136,7 @@
     <ClInclude Include="intergerPos.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="PlayerInfo.h" />
+    <ClInclude Include="utils.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
