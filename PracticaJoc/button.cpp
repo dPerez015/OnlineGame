@@ -13,6 +13,7 @@ Button::Button(std::string s,std::string msj,sf::Vector2f rectPos ,sf::Vector2f 
 	mainColor = main;
 	overColor = over;
 	selectedColor = presed;
+	blockColor = sf::Color(60, 60, 60, 255);
 
 	rect.setFillColor(main);
 
@@ -50,6 +51,14 @@ bool Button::checkClick(sf::Vector2f mousePosition) {
 		}
 	}
 	return false;
+}
+
+void Button::block() {
+	state = buttonState::blocked;
+	rect.setFillColor(blockColor);
+}
+void Button::unblock() {
+	unselect();
 }
 
 void Button::unselect() {

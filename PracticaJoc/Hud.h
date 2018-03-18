@@ -30,5 +30,5 @@ public:
 	void checkClick(sf::Vector2f mousePosition);
 	void setPlayer(Player* p);
 	void setMap(MapClient* m);
-
+	void unblock();
 };

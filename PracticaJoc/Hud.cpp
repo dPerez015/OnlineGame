@@ -56,7 +56,7 @@ void HUD::checkClick(sf::Vector2f mousePosition) {
 		}
 	}
 
-	if (endButton->checkClick(mousePosition)) {
+	if (endButton->checkClick(mousePosition)&& canPlay) {
 		std::string msjGenerated = generateButtonsString();
 		if (msjGenerated[0] == 'w') {
 			intergerPosition direction;
@@ -87,8 +87,14 @@ void HUD::checkClick(sf::Vector2f mousePosition) {
 			}
 		}
 		endButton->unselect();
-
+		endButton->block();
+		canPlay = false;
 	}
+}
+
+void HUD::unblock() {
+	canPlay = true;
+	endButton->unblock();
 }
 
 
@@ -101,13 +107,13 @@ std::string HUD::generateButtonsString() {
 	for (std::vector<Button*>::iterator it = directionButtons.begin(); it != directionButtons.end(); ++it) {
 		ret += (**it).isClicked();
 	}
-
 	return ret;
 }
 
 HUD::HUD(sf::TcpSocket* sock) {
 	socket = sock;
-
+	canPlay = false;
+	
 	//Font
 	if (!font.loadFromFile("calibril.ttf"))
 	{
@@ -198,7 +204,7 @@ HUD::HUD(sf::TcpSocket* sock) {
 	directionButtons.push_back(downButton);
 
 	//buttons.push_back(endTurnButton);
-
+	endButton->block();
 
 
 }

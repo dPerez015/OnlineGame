@@ -5,10 +5,11 @@
 #include "utils.h"
 #include "player.h"
 #include <iostream>
+#include "Hud.h"
 
 extern bool waitingForPlayers;
 
-void manageCommandClient(std::string command, std::map<int, Player*>* players,sf::TcpSocket* socket) {
+void manageCommandClient(std::string command, std::map<int, Player*>* players,sf::TcpSocket* socket, HUD* hud) {
 	std::vector<std::string> words = commandToWords(command);
 	if (words[0] == "chat") {
 		//aMensajes.push_back(words[1]);
@@ -18,6 +19,8 @@ void manageCommandClient(std::string command, std::map<int, Player*>* players,sf
 	}
 	else if (words[0] == "turn") {
 		//turn = std::stoi(words[1]);
+		std::cout << "Es mi turno\n";
+		hud->unblock();
 	}
 
 	else if (words[0] == "move") {

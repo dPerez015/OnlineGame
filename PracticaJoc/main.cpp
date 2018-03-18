@@ -13,6 +13,7 @@
 #include "player.h"
 #include <queue>
 #include "utils.h"
+#include "manageCommandClient.h"
  
 #define MAX_MSJ_SIZE 128
 
@@ -86,7 +87,7 @@ int main() {
 
 	sf::Font font;
 	if (!font.loadFromFile("calibril.ttf")) {
-		std::cout << "no se puede leer la font\n" << std::endl;
+		std::cout << "No se puede leer la font\n" << std::endl;
 	}
 
 	HUD hud(&socket);
@@ -100,6 +101,7 @@ int main() {
 	Player player3(map.getRectSize(), sf::Vector2f(200, 105));
 
 	Player player4(map.getRectSize(), sf::Vector2f(200, 105));
+
 
 	players.emplace(0, &player);
 	players.emplace(1, &player2);
@@ -130,6 +132,11 @@ int main() {
 				else if (words[0] == "start") {
 					waitingForPlayers = false;
 				}
+				else if (words[0] == "turn") {
+					//turn = std::stoi(words[1]);
+					std::cout << "Es mi turno\n";
+					hud.unblock();
+				}
 				commands.pop();
 			}
 			//DRAW HUD
@@ -137,12 +144,16 @@ int main() {
 			map.draw(&window);
 			//player.draw(&window);
 			
-
 			//clear
 			window.display();
 			window.clear();
 		}
 		else {
+			while(!commands.empty()) {
+				manageCommandClient(commands.front(), &players, &socket, &hud);
+				commands.pop();
+			}
+
 			sf::Event evento;
 			while (window.pollEvent(evento)) {
 				switch (evento.type) {

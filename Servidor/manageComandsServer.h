@@ -25,23 +25,24 @@ void manageCommandServer(std::string command, std::map<int,PlayerInfo> &players,
 			turnIndex = (turnIndex+1)%turnOrder.size();
 			if (words[0] == "w") {
 				//check if valid movement direction
-				intergerPosition direction = charToDir(words[2]);
+				intergerPosition direction = charToDir(words[1]);
 
 				if (mapa.canMove(players[id].getPosition().x + direction.x, players[id].getPosition().y + direction.y)) {
 					players[id].setPosition(players[id].getPosition().x + direction.x, players[id].getPosition().y + direction.y);
 					intergerPosition playerRoom = mapa.getPlayerRoom(players[id].getPosition());
 					for (std::map<int, sf::TcpSocket*>::iterator it = clients.begin(); it != clients.end(); ++it) {
 						//(*it).first
-						if (playerRoom == mapa.getPlayerRoom(players[(*it).first].getPosition())) {
+						//if (playerRoom == mapa.getPlayerRoom(players[(*it).first].getPosition())) {
 							std::string msj = "move_";
-							msj += id;
+							msj += std::to_string(id);
 							msj += "_";
-							msj += players[id].getPosition().x;
+							msj += std::to_string(players[id].getPosition().x);
 							msj += "_";
-							msj += players[id].getPosition().y;
+							msj += std::to_string(players[id].getPosition().y);
 
 							(*it).second->send(msj.c_str(), msj.size());
-						}
+							//std::cout << msj << "\n";
+						//}
 
 					}
 

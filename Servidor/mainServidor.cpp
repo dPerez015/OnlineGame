@@ -126,16 +126,18 @@ int main() {
 	
 	initialPosMsj = "move_1_1_14";
 	clients[1]->send(initialPosMsj.c_str(), initialPosMsj.size());
-	players[1].setPosition(1, 15);
+	players[1].setPosition(1, 14);
 
 	initialPosMsj = "move_2_19_1";
 	clients[2]->send(initialPosMsj.c_str(), initialPosMsj.size());
-	players[2].setPosition(20, 1);
+	players[2].setPosition(19, 1);
 
 	initialPosMsj = "move_3_19_14";
 	clients[3]->send(initialPosMsj.c_str(), initialPosMsj.size());
-	players[3].setPosition(20, 15);
+	players[3].setPosition(19, 14);
 
+	initialPosMsj = "turn";
+	clients[turnOrder[0]]->send(initialPosMsj.c_str(), initialPosMsj.size());
 
 	for (std::map<int, sf::TcpSocket*>::iterator it = clients.begin(); it != clients.end(); it++) {
 		(*it).second->send("start", 6);
