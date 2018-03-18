@@ -72,20 +72,25 @@ void manageCommandClient(std::string command, PlayerInfo player/*,socket?*/) {
 	}
 }
 
-void manageCommandPeer(std::string command, std::vector<PlayerInfo> players) {
+void manageCommandPeer(std::string command, std::vector<PlayerInfo> players, std::vector<std::string>* aMensajes) {
 	//alomejor se puede añadir al final el socket/peer/id del que procede (en el receive por ejemplo)
 	//se accederia a el con words[words.size()-1]
 	std::vector<std::string> words = commandToWords(command);
-	int id = std::stoi(words[words.size() - 1]);
+	//int id = std::stoi(words[words.size() - 1]);
 
 	if (words[0] == "chat") {
-		//std::string msj = nick + words[1];
-		//aMensajes.push_back(msj); //quien se guarda el nick?
+		//std::string msj = players[id].getNickname()+": " + words[1];
+		std::string msj =  words[1];
+		aMensajes->push_back(msj);
+		if (aMensajes->size() > 19)
+		{
+			aMensajes->erase(aMensajes->begin(), aMensajes->begin() + 1);
+		}
 	}
 	else if (words[0] == "w") {
 		//if is a valid move?? nose si caldria comprovarho
 		//words[1] es x o direccion??
-		players[id].setPosition(std::stoi(words[1]), std::stoi(words[2]));
+		//players[id].setPosition(std::stoi(words[1]), std::stoi(words[2]));
 	}
 
 	else if (words[0] == "a") {
@@ -98,12 +103,12 @@ void manageCommandPeer(std::string command, std::vector<PlayerInfo> players) {
 	}
 	
 	else if (words[0] == "b") {
-		players[id].blockingDirection = words[1]; //como gestionamos esto?
+		//players[id].blockingDirection = words[1]; //como gestionamos esto?
 		//players[id].blocking = true;
 	}
 
 	else if (words[0] == "nick") {
-		players[id].setNickname(words[1]);
+		//players[id].setNickname(words[1]);
 	}
 
 	else if (words[0] == "id") {
