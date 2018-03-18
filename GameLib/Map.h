@@ -50,6 +50,8 @@ public:
 		intergerPosition ret;
 		ret.x = cellPos.x / 5;
 		ret.y = cellPos.y / 5;
+
+		return ret;
 	};
 
 };

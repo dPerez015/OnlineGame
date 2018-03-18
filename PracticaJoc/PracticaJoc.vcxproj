@@ -131,6 +131,7 @@
     <ClInclude Include="button.h" />
     <ClInclude Include="cofre.h" />
     <ClInclude Include="Hud.h" />
+    <ClInclude Include="manageCommandClient.h" />
     <ClInclude Include="MapClient.h" />
     <ClInclude Include="player.h" />
   </ItemGroup>

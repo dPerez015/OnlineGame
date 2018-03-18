@@ -27,12 +27,13 @@ public:
 
 	//more variables
 	std::string blockingDirection = "";
+/*
+
+	static ItemList itemStringToEnum(std::string item) {
+		if (item == "boots") return ItemList(boots);
+		else if (item == "armor") return ItemList(armor);
+		else if (item == "shield") return ItemList(shield);
+		else /*if (item == "bow") return ItemList(bow);
+	}*/
 
 };
-
-ItemList itemStringToEnum(std::string item) {
-	if (item == "boots") return ItemList(boots);
-	else if (item == "armor") return ItemList(armor);
-	else if (item == "shield") return ItemList(shield);
-	else /*if (item == "bow")*/ return ItemList(bow);
-}

@@ -8,7 +8,7 @@
 #include <cmath>
 #include <Map.h>
 
-class MapClient : Map {
+class MapClient : public Map {
 private:	
 	std::list<sf::RectangleShape*> rectangulos;
 	sf::Color blockColor;

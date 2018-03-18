@@ -7,59 +7,6 @@
 
 
 
-//MAZE_INFO -todo lo relacionado con el mapa (posicion de los cofres, estado de las puertas)
-//el servidor lo tendrá actualizado en todo momento
-//pero el cliente solo se actualizara su habitacion
-
-//commands
-void manageCommandServer(std::string command, std::vector<PlayerInfo> &players, int id, std::vector<sf::TcpSocket*> &clients) {
-	std::vector<std::string> words = commandToWords(command);
-	if (words[0] == "chat") {
-		std::string msj = "chat_"+players[id].getNickname() + ": " + words[1];
-		for (int i = 0; i < clients.size(); ++i) {
-			clients[i]->send(msj.c_str(), msj.length());
-		}
-	}
-
-	else if (words[0] == "w") {
-		//check if valid movement direction
-
-		//if not valid, resend error msj ---> clients[id] hauria de funcionar
-		//clients[id]->send("error", 5);
-
-		//if is valid, change my local information
-		//then send to everybody who needs to know
-	}
-
-	else if (words[0] == "a") {
-		//if position = enemy then 
-		//if enemy isnt blocking in oposite dir then 
-		//send hit to him
-
-		//else nothing or send to player "missed"
-	}
-
-	else if (words[0] == "s") {
-		//if position = chest then send item to him
-
-		//else nothing or send to player an error command
-	}
-
-	else if (words[0] == "b") {
-		if (players[id].hasItem(ItemList(shield))) {
-			players[id].blockingDirection = words[1];
-		}
-		else {
-			clients[id]->send("error", 5);
-		}
-	}
-
-	else if (words[0] == "nick") {
-		players[id].setNickname(words[1]);
-	}
-}
-
-
 void manageCommandClient(std::string command, PlayerInfo player/*,socket?*/) {
 	std::vector<std::string> words = commandToWords(command);
 	if (words[0] == "chat") {
@@ -84,7 +31,7 @@ void manageCommandClient(std::string command, PlayerInfo player/*,socket?*/) {
 	}
 
 	else if (words[0] == "item") {
-		player.addItem(itemStringToEnum(words[1]));
+		//player.addItem(itemStringToEnum(words[1]));
 	}
 
 	else if (words[0] == "hit") {

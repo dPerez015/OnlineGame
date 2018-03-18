@@ -81,9 +81,9 @@ void HUD::checkClick(sf::Vector2f mousePosition) {
 				break;
 			}
 
-			if (ourMap->canMove(ourPlayer->getPos().x + direction.x, ourPlayer->getPos().y + direction.y)) {
+			if (ourMap->canMove(ourPlayer->getPosition().x + direction.x, ourPlayer->getPosition().y + direction.y)) {
 				socket->send(msjGenerated.c_str(),msjGenerated.length());
-				//ourPlayer->move(intergerPosition(ourPlayer->getPos().x + direction.x, ourPlayer->getPos().y + direction.y));
+				//ourPlayer->move(intergerPosition(ourPlayer->getPosition().x + direction.x, ourPlayer->getPosition().y + direction.y));
 			}
 		}
 		endButton->unselect();
@@ -185,10 +185,10 @@ HUD::HUD(sf::TcpSocket* sock) {
 	buttons.push_back(blockButton);
 
 
-	Button* rightButton = new Button((std::string)"RIGHT", (std::string)"r", sf::Vector2f(355, 52), sf::Vector2f(70, 48), font, 18);
+	Button* rightButton = new Button((std::string)"LEFT", (std::string)"l", sf::Vector2f(355, 52), sf::Vector2f(70, 48), font, 18);
 	directionButtons.push_back(rightButton);
 
-	Button* leftButton = new Button((std::string)"LEFT", (std::string)"l", sf::Vector2f(430, 52), sf::Vector2f(70, 48), font, 18);
+	Button* leftButton = new Button((std::string)"RIGHT", (std::string)"r", sf::Vector2f(430, 52), sf::Vector2f(70, 48), font, 18);
 	directionButtons.push_back(leftButton);
 
 	Button* upButton = new Button((std::string)"UP", (std::string)"u", sf::Vector2f(505, 52), sf::Vector2f(70, 48), font, 18);

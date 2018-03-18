@@ -2,20 +2,22 @@
 #include <SFML\Graphics.hpp>
 #include <SFML\Network.hpp>
 #include <vector>
-#include "intergerPos.h"
+#include <intergerPos.h>
 #include <PlayerInfo.h>
 
-class Player:PlayerInfo{
+class Player: public PlayerInfo{
 private:
 	std::vector<sf::RectangleShape*> rectangles;
 	sf::Vector2f size;
 	sf::Vector2f offSet;
+	bool isVisible;
 public:
 	Player(sf::Vector2f rectSize, sf::Vector2f screenOffset) {
 		pos.x = -1;
 		pos.y = -1;
 		size = rectSize;
 		offSet = screenOffset;
+		isVisible = false;
 
 		sf::RectangleShape* cabeza = new sf::RectangleShape(sf::Vector2f(rectSize.x, rectSize.y / 4)); 
 		cabeza->setFillColor(sf::Color(242,203,167,255));
@@ -49,7 +51,10 @@ public:
 		pos = newPos;
 		updatePos();
 	}
-
+	void setControlable() {
+		rectangles[3]->setOutlineColor(sf::Color(0, 255, 0, 255));
+		rectangles[3]->setOutlineThickness(2);
+	}
 
 	void draw(sf::RenderWindow* renderer) {
 		for (std::vector<sf::RectangleShape*>::iterator it = rectangles.begin(); it != rectangles.end(); ++it) {

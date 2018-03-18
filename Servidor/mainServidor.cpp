@@ -7,27 +7,29 @@
 #include <mutex>
 #include "PlayerInfo.h"
 #include "Game.h"
+#include <Map.h>
+#include "manageComandsServer.h"
 
 #define MAX_MSG_SIZE 128
 
 void cleanup();
-void receiveThread(sf::TcpSocket* socket);
-std::map<sf::TcpSocket*, int> socketToID; //map para guardar ID segun el socket
+void receiveThread(sf::TcpSocket* socket,int id);
 std::thread t1, t2, t3, t4;
-std::vector<PlayerInfo> players;
-std::vector<sf::TcpSocket*> clients;
+std::map<int,PlayerInfo> players;
+std::map<int,sf::TcpSocket*> clients;
 std::mutex mu;
+Map mapa;
+
 
 void inicializarThread(int clientNumber, sf::TcpSocket* socket) {
-	if (clientNumber == 1) t1 = std::thread(&receiveThread, socket);
-	else if(clientNumber == 2) t2 = std::thread(&receiveThread, socket);
-	else if (clientNumber == 3) t3 = std::thread(&receiveThread, socket);
-	else if (clientNumber == 4) t4 = std::thread(&receiveThread, socket);
+	if (clientNumber == 0) t1 = std::thread(&receiveThread, socket,clientNumber);
+	else if(clientNumber == 1) t2 = std::thread(&receiveThread, socket, clientNumber);
+	else if (clientNumber == 2) t3 = std::thread(&receiveThread, socket, clientNumber);
+	else if (clientNumber == 3) t4 = std::thread(&receiveThread, socket, clientNumber);
 }
 
-void receiveThread(sf::TcpSocket* socket) {
+void receiveThread(sf::TcpSocket* socket,int id) {
 	std::cout << "Thread para el recieve inicializado!\n";
-	int id = socketToID[socket];
 	char buffer[MAX_MSG_SIZE];
 	std::size_t bytesReceived;
 	sf::Socket::Status status;
@@ -36,6 +38,7 @@ void receiveThread(sf::TcpSocket* socket) {
 		status = socket->receive(buffer, MAX_MSG_SIZE, bytesReceived);
 		if (status == sf::Socket::Status::Disconnected) {
 			open = false;
+			socket->disconnect();
 			std::cout << "Conexion con el cliente "<< id << " perdida\n";
 		}
 		else if (status == sf::Socket::Status::Done) {
@@ -60,6 +63,7 @@ int main() {
 		std::cout << "Puerto 50000 abierto\n";
 	}
 
+
 	
 
 	//conexión de los 4 clientes. Suponemos que no se desconectan hasta que empieza la partida.
@@ -67,14 +71,31 @@ int main() {
 		sf::TcpSocket* incomingClient = new sf::TcpSocket;
 		if (listener.accept(*incomingClient) == sf::Socket::Done) {
 			std::cout << "Nuevo cliente aceptado\n";
-			clients.push_back(incomingClient);
-			int clientNumber = clients.size();
-			socketToID[incomingClient] = clientNumber;
-			players.push_back(PlayerInfo(clientNumber));
-			std::string msj = "id_"+std::to_string(clientNumber);
-			incomingClient->send(msj.c_str(), msj.length()); //send con la ID que se le assigna
-			inicializarThread(clientNumber, incomingClient); //abrir el thread para ese socket
+			clients[i]= incomingClient;
+			players[i]=PlayerInfo(i);
+			char buffer[MAX_MSG_SIZE];
+			size_t bytesRecibed;
+			sf::Socket::Status status = incomingClient->receive(buffer,MAX_MSG_SIZE,bytesRecibed);
+			if (status!=sf::Socket::Status::Done) {
+				std::cout << "Ha habido un problema al inicializar la conexion con este client\n";
+				incomingClient->disconnect();
+				clients.erase(i);
+				players.erase(i);
+			}
+			else {
+				buffer[bytesRecibed] = '\0';
+				std::vector<std::string> words = commandToWords(buffer);
+				players[i].setNickname( words[1]);
 
+				std::string msj = "id_" + std::to_string(i);
+				incomingClient->send(msj.c_str(), msj.length()); //send con la ID que se le assigna
+				
+				for (std::map<int, sf::TcpSocket*>::iterator it = clients.begin(); it != clients.end(); it++) {
+					(*it).second->send("con",4);
+				}
+				
+				inicializarThread(i, incomingClient); //abrir el thread para ese socket
+			}
 		}
 	}
 	listener.close();
@@ -91,7 +112,28 @@ int main() {
 	}
 	std::cout << "Todos los jugadores listos. Empieza el juego!\n";
 	//Aqui ya hay 4 clientes conectados y puede empezar el juego
+
+	std::string initialPosMsj="move_0_1_1";
+	clients[0]->send(initialPosMsj.c_str(), initialPosMsj.size());
+	players[0].setPosition(1, 1);
 	
+	initialPosMsj = "move_1_1_14";
+	clients[1]->send(initialPosMsj.c_str(), initialPosMsj.size());
+	players[1].setPosition(1, 15);
+
+	initialPosMsj = "move_2_19_1";
+	clients[2]->send(initialPosMsj.c_str(), initialPosMsj.size());
+	players[2].setPosition(20, 1);
+
+	initialPosMsj = "move_3_19_14";
+	clients[3]->send(initialPosMsj.c_str(), initialPosMsj.size());
+	players[3].setPosition(20, 15);
+
+
+	for (std::map<int, sf::TcpSocket*>::iterator it = clients.begin(); it != clients.end(); it++) {
+		(*it).second->send("start", 6);
+	}
+
 	while (true) {
 
 	}
