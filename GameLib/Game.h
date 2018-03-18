@@ -125,3 +125,41 @@ void manageCommandClient(std::string command, PlayerInfo player/*,socket?*/) {
 	}
 }
 
+void manageCommandPeer(std::string command, std::vector<PlayerInfo> players) {
+	//alomejor se puede añadir al final el socket/peer/id del que procede (en el receive por ejemplo)
+	//se accederia a el con words[words.size()-1]
+	std::vector<std::string> words = commandToWords(command);
+	int id = std::stoi(words[words.size() - 1]);
+
+	if (words[0] == "chat") {
+		//std::string msj = nick + words[1];
+		//aMensajes.push_back(msj); //quien se guarda el nick?
+	}
+	else if (words[0] == "w") {
+		//if is a valid move?? nose si caldria comprovarho
+		//words[1] es x o direccion??
+		players[id].setPosition(std::stoi(words[1]), std::stoi(words[2]));
+	}
+
+	else if (words[0] == "a") {
+		//cal fer l'atac?
+	}
+
+	else if (words[0] == "s") {
+		//cal fer el search? si els cofres queden oberts si
+		//map.position(words[2],words[2]).openChest();
+	}
+	
+	else if (words[0] == "b") {
+		players[id].blockingDirection = words[1]; //como gestionamos esto?
+		//players[id].blocking = true;
+	}
+
+	else if (words[0] == "nick") {
+		players[id].setNickname(words[1]);
+	}
+
+	else if (words[0] == "id") {
+		//players[id] //redundante?? como se pasa la id? lo gestiona individualmente cada peer?
+	}
+}

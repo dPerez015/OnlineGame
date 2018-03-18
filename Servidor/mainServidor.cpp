@@ -8,6 +8,7 @@
 #include "PlayerInfo.h"
 #include "Game.h"
 
+#define MAX_MSG_SIZE 100
 
 void cleanup();
 void receiveThread(sf::TcpSocket* socket);
@@ -27,12 +28,12 @@ void inicializarThread(int clientNumber, sf::TcpSocket* socket) {
 void receiveThread(sf::TcpSocket* socket) {
 	std::cout << "Thread para el recieve inicializado!\n";
 	int id = socketToID[socket];
-	char buffer[100];
+	char buffer[MAX_MSG_SIZE];
 	std::size_t bytesReceived;
 	sf::Socket::Status status;
 	bool open = true;
 	while (open) {
-		status = socket->receive(&buffer, 100, bytesReceived);
+		status = socket->receive(buffer, MAX_MSG_SIZE, bytesReceived);
 		if (status == sf::Socket::Status::Disconnected) {
 			open = false;
 			std::cout << "Conexion con el cliente "<< id << " perdida\n";
