@@ -44,6 +44,9 @@ public:
 		}
 		
 	};
+	bool canMove(int x, int y) {
+		return !(mapa[x][y]);
+	}
 	intergerPosition getPlayerRoom(intergerPosition cellPos) {
 		intergerPosition ret;
 		ret.x = cellPos.x / 5;
@@ -60,6 +63,10 @@ private:
 	sf::Vector2f rectSize;
 
 public:
+	sf::Vector2f getRectSize() {
+		return rectSize;
+	}
+
 	MapClient(sf::Vector2f windowSize):Map() {
 		blockColor = sf::Color(150, 150, 150, 255);
 		chestColor = sf::Color(153, 102, 0, 255);

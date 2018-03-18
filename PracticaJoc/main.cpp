@@ -9,7 +9,9 @@
 #include "PlayerInfo.h"
 #include "button.h"
 #include "Map.h"
+#include "player.h"
  
+#define MAX_MSJ_SIZE 128
 
 
 std::mutex mu;
@@ -18,12 +20,12 @@ PlayerInfo myInfo;
 
 void receiveThread(sf::TcpSocket* socket) {
 	std::cout << "Thread para el recieve inicializado!\n";
-	char buffer[100];
+	char buffer[MAX_MSJ_SIZE];
 	std::size_t bytesReceived;
 	sf::Socket::Status status;
 	bool open = true;;
 	while (open) {
-		status = socket->receive(&buffer, 100, bytesReceived);
+		status = socket->receive(&buffer, MAX_MSJ_SIZE, bytesReceived);
 		if (status == sf::Socket::Status::Disconnected) {
 			open = false;
 			std::cout << "Conexion con el servidor perdida\n";
@@ -53,7 +55,7 @@ void receiveThread(sf::TcpSocket* socket) {
 };
 
 int main() {
-	/*
+	
 	//PARTE DE CONEXIÓN CON EL SERVIDOR-------------------------------------------------------
 	std::cout << "Establecimiento de conexion...\n";
 	sf::TcpSocket socket;
@@ -87,7 +89,7 @@ int main() {
 	std::cout << "Empieza el juego!\n";
 	
 	//----------------------------------------------------------------------------------------
-	*/
+	
 	sf::Vector2i screenDimensions(800, 600);
 
 	sf::RenderWindow window;
@@ -98,10 +100,15 @@ int main() {
 		std::cout << "no se puede leer la font\n" << std::endl;
 	}
 
-	HUD hud;
+	HUD hud(&socket);
 
 	MapClient map(sf::Vector2f(600,495));
-	//map
+	
+	Player player(map.getRectSize(), sf::Vector2f(200,105));
+	player.move(intergerPosition(1,1));
+
+	hud.setMap(&map);
+	hud.setPlayer(&player);
 	
 	//Button button((std::string)"prueba", sf::Vector2f(300,300), sf::Vector2f(100, 100),font,16);
 
@@ -131,6 +138,7 @@ int main() {
 		//DRAW HUD
 		hud.draw(&window);
 		map.draw(&window);
+		player.draw(&window);
 
 		//clear
 		window.display();

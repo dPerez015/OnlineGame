@@ -8,7 +8,7 @@
 #include "PlayerInfo.h"
 #include "Game.h"
 
-#define MAX_MSG_SIZE 100
+#define MAX_MSG_SIZE 128
 
 void cleanup();
 void receiveThread(sf::TcpSocket* socket);

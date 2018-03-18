@@ -26,6 +26,14 @@ void HUD::update(sf::Vector2f mousePosition) {
 	endButton->update(mousePosition);
 }
 
+void HUD::setPlayer(Player* p) {
+	ourPlayer = p;
+}
+
+void HUD::setMap(MapClient* m) {
+	ourMap = m;
+}
+
 void HUD::checkClick(sf::Vector2f mousePosition) {
 	for (std::vector<Button*>::iterator i = buttons.begin(); i != buttons.end(); ++i) {
 		//(**i).unselect();
@@ -49,16 +57,57 @@ void HUD::checkClick(sf::Vector2f mousePosition) {
 	}
 
 	if (endButton->checkClick(mousePosition)) {
+		std::string msjGenerated = generateButtonsString();
+		if (msjGenerated[0] == 'w') {
+			intergerPosition direction;
+			switch (msjGenerated[2]){
+			case 'r':
+				direction.x = 1;
+				direction.y = 0;
+				break;
+			case 'l':
+				direction.x = -1;
+				direction.y = 0;
+				break;
+			case 'u':
+				direction.x = 0;
+				direction.y = -1;
+				break;
+			case 'd':
+				direction.x = 0;
+				direction.y = 1;
+				break;
+			default:
+				break;
+			}
+
+			if (ourMap->canMove(ourPlayer->getPos().x + direction.x, ourPlayer->getPos().y + direction.y)) {
+				socket->send(msjGenerated.c_str(),msjGenerated.length());
+				//ourPlayer->move(intergerPosition(ourPlayer->getPos().x + direction.x, ourPlayer->getPos().y + direction.y));
+			}
+		}
+		endButton->unselect();
 
 	}
 }
 
+
 std::string HUD::generateButtonsString() {
 	std::string ret="";
+	for (std::vector<Button*>::iterator it = buttons.begin(); it != buttons.end(); ++it) {
+		ret += (**it).isClicked();
+	}
+	ret += "_";
+	for (std::vector<Button*>::iterator it = directionButtons.begin(); it != directionButtons.end(); ++it) {
+		ret += (**it).isClicked();
+	}
+
 	return ret;
 }
 
-HUD::HUD() {
+HUD::HUD(sf::TcpSocket* sock) {
+	socket = sock;
+
 	//Font
 	if (!font.loadFromFile("calibril.ttf"))
 	{
@@ -121,31 +170,31 @@ HUD::HUD() {
 	texts.push_back(actionsText);
 
 	//Botones
-	endButton = new Button((std::string)"END TURN",sf::Vector2f(655,10),sf::Vector2f(140,80),font,24);
+	endButton = new Button((std::string)"END TURN",(std::string)"",sf::Vector2f(655,10),sf::Vector2f(140,80),font,24);
 	
-	Button* moveButton = new Button((std::string)"MOVE", sf::Vector2f(355, 0), sf::Vector2f(70, 48), font, 18);
+	Button* moveButton = new Button((std::string)"MOVE", (std::string)"w", sf::Vector2f(355, 0), sf::Vector2f(70, 48), font, 18);
 	buttons.push_back(moveButton);
 
-	Button* attackButton = new Button((std::string)"ATTACK", sf::Vector2f(430, 0), sf::Vector2f(70, 48), font, 18);
+	Button* attackButton = new Button((std::string)"ATTACK", (std::string)"a", sf::Vector2f(430, 0), sf::Vector2f(70, 48), font, 18);
 	buttons.push_back(attackButton);
 
-	Button* searchButton = new Button((std::string)"SEARCH", sf::Vector2f(505, 0), sf::Vector2f(70, 48), font, 18);
+	Button* searchButton = new Button((std::string)"SEARCH", (std::string)"s", sf::Vector2f(505, 0), sf::Vector2f(70, 48), font, 18);
 	buttons.push_back(searchButton);
 
-	Button* blockButton = new Button((std::string)"BLOCK", sf::Vector2f(580, 0), sf::Vector2f(70, 48), font, 18);
+	Button* blockButton = new Button((std::string)"BLOCK", (std::string)"b", sf::Vector2f(580, 0), sf::Vector2f(70, 48), font, 18);
 	buttons.push_back(blockButton);
 
 
-	Button* rightButton = new Button((std::string)"RIGHT", sf::Vector2f(355, 52), sf::Vector2f(70, 48), font, 18);
+	Button* rightButton = new Button((std::string)"RIGHT", (std::string)"r", sf::Vector2f(355, 52), sf::Vector2f(70, 48), font, 18);
 	directionButtons.push_back(rightButton);
 
-	Button* leftButton = new Button((std::string)"LEFT", sf::Vector2f(430, 52), sf::Vector2f(70, 48), font, 18);
+	Button* leftButton = new Button((std::string)"LEFT", (std::string)"l", sf::Vector2f(430, 52), sf::Vector2f(70, 48), font, 18);
 	directionButtons.push_back(leftButton);
 
-	Button* upButton = new Button((std::string)"UP", sf::Vector2f(505, 52), sf::Vector2f(70, 48), font, 18);
+	Button* upButton = new Button((std::string)"UP", (std::string)"u", sf::Vector2f(505, 52), sf::Vector2f(70, 48), font, 18);
 	directionButtons.push_back(upButton);
 
-	Button* downButton = new Button((std::string)"DOWN", sf::Vector2f(580, 52), sf::Vector2f(70, 48), font, 18);
+	Button* downButton = new Button((std::string)"DOWN", (std::string)"d", sf::Vector2f(580, 52), sf::Vector2f(70, 48), font, 18);
 	directionButtons.push_back(downButton);
 
 	//buttons.push_back(endTurnButton);

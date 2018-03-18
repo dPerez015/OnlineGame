@@ -5,15 +5,15 @@
 #include <cmath>
 
 class Map {
-private:
+protected:
 	int mapa[21][16];
 
 public:
-	Map() {		 
+	Map() {
 		//paredes externas
 		for (int i = 0; i < 21; i++) {
 			for (int j = 0; j < 16; j++) {
-				if (i==0 || j==0 || i==10 || j==20) {
+				if (i == 0 || j == 0 || i == 20 || j == 15) {
 					mapa[i][j] = 1;
 				}
 				else {
@@ -22,8 +22,8 @@ public:
 			}
 		}
 		//paredes habitaciones i cofres
-		for (int i = 0; i < 4;i++) {
-			for (int j = 0; i < 3; j++) {
+		for (int i = 0; i < 4; i++) {
+			for (int j = 0; j < 3; j++) {
 				//paredes
 				mapa[1 + (i * 5) + 4][1 + (j * 5) + 0] = 1;
 				mapa[1 + (i * 5) + 4][1 + (j * 5) + 1] = 1;
@@ -43,10 +43,13 @@ public:
 		}
 
 	};
+	bool canMove(int x, int y) {
+		return !(mapa[x][y]);
+	}
 	intergerPosition getPlayerRoom(intergerPosition cellPos) {
 		intergerPosition ret;
 		ret.x = cellPos.x / 5;
-		ret.y = cellPos.y/5;
+		ret.y = cellPos.y / 5;
 	};
 
 };

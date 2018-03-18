@@ -1,6 +1,6 @@
 #include "button.h"
 
-Button::Button(std::string s,sf::Vector2f rectPos ,sf::Vector2f rectSize, sf::Font& f,float textSize, sf::Color main, sf::Color over, sf::Color presed){
+Button::Button(std::string s,std::string msj,sf::Vector2f rectPos ,sf::Vector2f rectSize, sf::Font& f,float textSize, sf::Color main, sf::Color over, sf::Color presed){
 	text.setString(s);
 	font = f;
 	text.setFont(font);
@@ -15,6 +15,8 @@ Button::Button(std::string s,sf::Vector2f rectPos ,sf::Vector2f rectSize, sf::Fo
 	selectedColor = presed;
 
 	rect.setFillColor(main);
+
+	msjToSend = msj;
 
 	state = buttonState::unselected;
 }
@@ -58,4 +60,12 @@ void Button::unselect() {
 void Button::draw(sf::RenderWindow* renderer) {
 	renderer->draw(rect);
 	renderer->draw(text);
+}
+
+
+std::string Button::isClicked() {
+	if (state == buttonState::pressed) {
+		return msjToSend;
+	}
+	return "";
 }
