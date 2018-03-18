@@ -32,16 +32,13 @@
     <ClInclude Include="button.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Map.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="intergerPos.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="cofre.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="player.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MapClient.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

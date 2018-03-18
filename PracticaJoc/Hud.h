@@ -5,7 +5,7 @@
 #include <iostream>
 #include "button.h"
 #include "player.h"
-#include "Map.h"
+#include "MapClient.h"
 
 class HUD {
 private: 

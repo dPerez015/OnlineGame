@@ -131,8 +131,7 @@
     <ClInclude Include="button.h" />
     <ClInclude Include="cofre.h" />
     <ClInclude Include="Hud.h" />
-    <ClInclude Include="intergerPos.h" />
-    <ClInclude Include="Map.h" />
+    <ClInclude Include="MapClient.h" />
     <ClInclude Include="player.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

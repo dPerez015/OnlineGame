@@ -5,6 +5,7 @@
 enum ItemList { boots, armor, shield, bow };
 
 class PlayerInfo {
+protected:
 	int playerID; //1,2,3 or 4
 	std::string nickname;
 	std::vector<bool> items; //objetos

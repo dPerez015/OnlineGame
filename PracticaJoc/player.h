@@ -3,10 +3,10 @@
 #include <SFML\Network.hpp>
 #include <vector>
 #include "intergerPos.h"
+#include <PlayerInfo.h>
 
-class Player {
+class Player:PlayerInfo{
 private:
-	intergerPosition pos;
 	std::vector<sf::RectangleShape*> rectangles;
 	sf::Vector2f size;
 	sf::Vector2f offSet;
@@ -33,6 +33,7 @@ public:
 		pies->setFillColor(sf::Color(242, 203, 167, 255));
 		rectangles.push_back(pies);
 
+		items = std::vector<bool>((4, false));
 	}
 	void updatePos() {
 		std::vector<sf::RectangleShape*>::iterator it = rectangles.begin();
@@ -48,13 +49,7 @@ public:
 		pos = newPos;
 		updatePos();
 	}
-	/*intergerPosition getPos() {
-		return pos;
-	}*/
 
-	void getUpgrade(int upgrade) {
-		
-	}
 
 	void draw(sf::RenderWindow* renderer) {
 		for (std::vector<sf::RectangleShape*>::iterator it = rectangles.begin(); it != rectangles.end(); ++it) {
