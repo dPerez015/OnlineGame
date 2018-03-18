@@ -7,6 +7,10 @@
 #include <vector>
 #include "Hud.h"
 #include "PlayerInfo.h"
+#include "button.h"
+#include "Map.h"
+ 
+
 
 std::mutex mu;
 int playersConnected;
@@ -49,7 +53,7 @@ void receiveThread(sf::TcpSocket* socket) {
 };
 
 int main() {
-
+	/*
 	//PARTE DE CONEXIÓN CON EL SERVIDOR-------------------------------------------------------
 	std::cout << "Establecimiento de conexion...\n";
 	sf::TcpSocket socket;
@@ -83,7 +87,7 @@ int main() {
 	std::cout << "Empieza el juego!\n";
 	
 	//----------------------------------------------------------------------------------------
-
+	*/
 	sf::Vector2i screenDimensions(800, 600);
 
 	sf::RenderWindow window;
@@ -96,6 +100,11 @@ int main() {
 
 	HUD hud;
 
+	MapClient map(sf::Vector2f(600,495));
+	//map
+	
+	//Button button((std::string)"prueba", sf::Vector2f(300,300), sf::Vector2f(100, 100),font,16);
+
 	while (window.isOpen())
 	{
 		sf::Event evento;
@@ -104,8 +113,13 @@ int main() {
 			case sf::Event::Closed:
 				window.close();
 				break;
-				break;
 			case sf::Event::KeyPressed:
+				break;
+			case sf::Event::MouseMoved:
+				hud.update(sf::Vector2f(evento.mouseMove.x, evento.mouseMove.y));
+				break;
+			case sf::Event::MouseButtonPressed:
+				hud.checkClick(sf::Vector2f(evento.mouseButton.x, evento.mouseButton.y));
 				break;
 			case sf::Event::TextEntered:
 				break;
@@ -116,6 +130,7 @@ int main() {
 
 		//DRAW HUD
 		hud.draw(&window);
+		map.draw(&window);
 
 		//clear
 		window.display();

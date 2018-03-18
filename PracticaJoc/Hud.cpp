@@ -7,6 +7,55 @@ void HUD::draw(sf::RenderWindow* renderer) {
 	for (std::list<sf::Text*>::iterator it = texts.begin(); it != texts.end(); ++it) {
 		renderer->draw(**it);
 	}
+	for (std::vector<Button*>::iterator i = buttons.begin(); i != buttons.end(); ++i) {
+		(**i).draw(renderer);
+	}
+	for (std::vector<Button*>::iterator i = directionButtons.begin(); i != directionButtons.end(); ++i) {
+		(**i).draw(renderer);
+	}
+	endButton->draw(renderer);
+}
+
+void HUD::update(sf::Vector2f mousePosition) {
+	for (std::vector<Button*>::iterator i = buttons.begin(); i != buttons.end(); ++i) {
+		(**i).update(mousePosition);
+	}
+	for (std::vector<Button*>::iterator i = directionButtons.begin(); i != directionButtons.end(); ++i) {
+		(**i).update(mousePosition);
+	}
+	endButton->update(mousePosition);
+}
+
+void HUD::checkClick(sf::Vector2f mousePosition) {
+	for (std::vector<Button*>::iterator i = buttons.begin(); i != buttons.end(); ++i) {
+		//(**i).unselect();
+		if ((**i).checkClick(mousePosition)) {
+			for (std::vector<Button*>::iterator j = buttons.begin(); j != buttons.end(); ++j) {
+				if(j!=i)
+					(**j).unselect();
+			}
+			return;
+		}
+	}
+	for (std::vector<Button*>::iterator i = directionButtons.begin(); i != directionButtons.end(); ++i) {
+		//(**i).unselect();
+		if ((**i).checkClick(mousePosition)) {
+			for (std::vector<Button*>::iterator j = directionButtons.begin(); j != directionButtons.end(); ++j) {
+				if (j != i)
+					(**j).unselect();
+			}
+			return;
+		}
+	}
+
+	if (endButton->checkClick(mousePosition)) {
+
+	}
+}
+
+std::string HUD::generateButtonsString() {
+	std::string ret="";
+	return ret;
 }
 
 HUD::HUD() {
@@ -39,50 +88,68 @@ HUD::HUD() {
 
 	sf::RectangleShape* subActionsSeparator = new sf::RectangleShape(sf::Vector2f(300,5));
 	subActionsSeparator->setOutlineColor(sf::Color(200, 200, 200, 255)); 
-	subActionsSeparator->setPosition(350, 40);
+	subActionsSeparator->setPosition(350, 48);
 	rectangulos.push_back(subActionsSeparator);
 
-	sf::RectangleShape* subActionsSeparator1 = new sf::RectangleShape(sf::Vector2f(5, 60));
+	sf::RectangleShape* subActionsSeparator1 = new sf::RectangleShape(sf::Vector2f(5, 100));
 	subActionsSeparator1->setOutlineColor(sf::Color(200, 200, 200, 255));
-	subActionsSeparator1->setPosition(425, 40);
+	subActionsSeparator1->setPosition(425, 0);
 	rectangulos.push_back(subActionsSeparator1);
 
-	sf::RectangleShape* subActionsSeparator2 = new sf::RectangleShape(sf::Vector2f(5, 60));
+	sf::RectangleShape* subActionsSeparator2 = new sf::RectangleShape(sf::Vector2f(5, 100));
 	subActionsSeparator2->setOutlineColor(sf::Color(200, 200, 200, 255));
-	subActionsSeparator2->setPosition(500, 40);
+	subActionsSeparator2->setPosition(500, 0);
 	rectangulos.push_back(subActionsSeparator2);
 
-	sf::RectangleShape* subActionsSeparator3 = new sf::RectangleShape(sf::Vector2f(5, 60));
+	sf::RectangleShape* subActionsSeparator3 = new sf::RectangleShape(sf::Vector2f(5, 100));
 	subActionsSeparator3->setOutlineColor(sf::Color(200, 200, 200, 255));
-	subActionsSeparator3->setPosition(575, 40);
+	subActionsSeparator3->setPosition(575, 0);
 	rectangulos.push_back(subActionsSeparator3);
 
-	
-	sf::Text* hp = new sf::Text("HP",font,24);
-	hp->setFillColor(sf::Color(220,220,220,255));
-	hp->setStyle(sf::Text::Bold);
-	hp->setPosition(10, 20);
-	texts.push_back(hp);
+	//textos
 
 	sf::Text* objetosText = new sf::Text("OBJETOS", font, 24);
 	objetosText->setFillColor(sf::Color(220, 220, 220, 255));
 	objetosText->setStyle(sf::Text::Bold);
-	objetosText->setPosition(230, 10);
+	objetosText->setPosition(10, 10);
 	texts.push_back(objetosText);
 
 	sf::Text* actionsText = new sf::Text("ACCIONES", font, 24);
 	actionsText->setFillColor(sf::Color(220, 220, 220, 255));
 	actionsText->setStyle(sf::Text::Bold);
-	actionsText->setPosition(450, 7);
+	actionsText->setPosition(210, 20);
 	texts.push_back(actionsText);
 
-	//HP
-	sf::RectangleShape* vidaSeparator =new sf::RectangleShape(sf::Vector2f(100, 50));
-	vidaSeparator->setFillColor(sf::Color(0, 0, 0, 255));
-	vidaSeparator->setOutlineColor(sf::Color(200, 200, 200, 255));
-	vidaSeparator->setOutlineThickness(5);
-	vidaSeparator->setPosition(80, 35);
-	rectangulos.push_back(vidaSeparator);
+	//Botones
+	endButton = new Button((std::string)"END TURN",sf::Vector2f(655,10),sf::Vector2f(140,80),font,24);
+	
+	Button* moveButton = new Button((std::string)"MOVE", sf::Vector2f(355, 0), sf::Vector2f(70, 48), font, 18);
+	buttons.push_back(moveButton);
+
+	Button* attackButton = new Button((std::string)"ATTACK", sf::Vector2f(430, 0), sf::Vector2f(70, 48), font, 18);
+	buttons.push_back(attackButton);
+
+	Button* searchButton = new Button((std::string)"SEARCH", sf::Vector2f(505, 0), sf::Vector2f(70, 48), font, 18);
+	buttons.push_back(searchButton);
+
+	Button* blockButton = new Button((std::string)"BLOCK", sf::Vector2f(580, 0), sf::Vector2f(70, 48), font, 18);
+	buttons.push_back(blockButton);
+
+
+	Button* rightButton = new Button((std::string)"RIGHT", sf::Vector2f(355, 52), sf::Vector2f(70, 48), font, 18);
+	directionButtons.push_back(rightButton);
+
+	Button* leftButton = new Button((std::string)"LEFT", sf::Vector2f(430, 52), sf::Vector2f(70, 48), font, 18);
+	directionButtons.push_back(leftButton);
+
+	Button* upButton = new Button((std::string)"UP", sf::Vector2f(505, 52), sf::Vector2f(70, 48), font, 18);
+	directionButtons.push_back(upButton);
+
+	Button* downButton = new Button((std::string)"DOWN", sf::Vector2f(580, 52), sf::Vector2f(70, 48), font, 18);
+	directionButtons.push_back(downButton);
+
+	//buttons.push_back(endTurnButton);
+
 
 
 }
