@@ -20,7 +20,11 @@ void manageCommandClient(std::string command, std::map<int, Player*>* players,sf
 	}
 	else if (words[0] == "v") {
 		if (words[2] == "0") {
-			players[std::stoi(words[1])].
+			(*players)[std::stoi(words[1])]->makeVisible(false);
+		}
+		else {
+			(*players)[std::stoi(words[1])]->makeVisible(true);
+			std::cout << "Make visible player " << words[1];
 		}
 		//players[words[1]]
 	}

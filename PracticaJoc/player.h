@@ -52,8 +52,11 @@ public:
 		updatePos();
 	}
 
-	void makeVisible(bool) {
-
+	void makeVisible(bool v) {
+		isVisible = v;
+	}
+	bool getVisible() {
+		return isVisible;
 	}
 	void setControlable() {
 		rectangles[3]->setOutlineColor(sf::Color(0, 255, 0, 255));

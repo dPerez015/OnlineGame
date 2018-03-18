@@ -31,7 +31,7 @@ void manageCommandServer(std::string command, std::map<int,PlayerInfo> &players,
 					players[id].setPosition(players[id].getPosition().x + direction.x, players[id].getPosition().y + direction.y);
 					intergerPosition playerRoom = mapa.getPlayerRoom(players[id].getPosition());
 					for (std::map<int, sf::TcpSocket*>::iterator it = clients.begin(); it != clients.end(); ++it) {
-						//(*it).first
+						
 						if (playerRoom == mapa.getPlayerRoom(players[(*it).first].getPosition())) {
 							std::string msj = "move_";
 							msj += std::to_string(id);
@@ -41,9 +41,23 @@ void manageCommandServer(std::string command, std::map<int,PlayerInfo> &players,
 							msj += std::to_string(players[id].getPosition().y);
 
 							(*it).second->send(msj.c_str(), msj.size());
-							//std::cout << msj << "\n";
-						}
 
+							msj = "v_" + std::to_string(id) + "_" + "1";
+							(*it).second->send(msj.c_str(), msj.size());
+
+							msj= "v_" + std::to_string((*it).first) + "_" + "1";
+							clients[id]->send(msj.c_str(), msj.size());
+
+							msj = "move_" + std::to_string((*it).first) + "_" + std::to_string(players[(*it).first].getPosition().x) + "_" + std::to_string(players[(*it).first].getPosition().y);
+							clients[id]->send(msj.c_str(), msj.size());
+							std::cout << msj << "\n";
+						}
+						else {
+							std::string msj = "v_" + std::to_string(id) + "_" + "0";
+							(*it).second->send(msj.c_str(), msj.size());
+							msj = "v_" + std::to_string((*it).first) + "_" + "0";
+							clients[id]->send(msj.c_str(), msj.size());
+						}
 					}
 
 				}
